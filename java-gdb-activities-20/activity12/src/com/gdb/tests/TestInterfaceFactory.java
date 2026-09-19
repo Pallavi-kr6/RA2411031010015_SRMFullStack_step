@@ -7,19 +7,79 @@ public class TestInterfaceFactory {
     public static void main(String[] args) {
         System.out.println("=== Activity 12: Factory-Driven System Suite ===");
 
-        // NOTE: If you completed Activity 11 successfully, paste your working IAccount.java and AccountFactory.java into src/com/gdb/domain (replacing the provided versions).
+        // Step 1: Create accounts ONLY through AccountFactory
+        IAccount savings = AccountFactory.createAccount(
+                "SAVINGS", "SAV1001", "Rajesh Sharma",
+                28, 5000.0, "ACTIVE", "1234"
+        );
 
-        // TODO: Step 1 - Instantiate Savings, Current, and FixedDeposit accounts exclusively through AccountFactory.createAccount()
+        IAccount current = AccountFactory.createAccount(
+                "CURRENT", "CUR1001", "Priya Patel",
+                34, 10000.0, "ACTIVE", "5678"
+        );
 
-        // TODO: Step 2 - Perform deposits and withdrawals through the IAccount interface references
+        IAccount fixedDeposit = AccountFactory.createAccount(
+                "FIXED_DEPOSIT", "FD1001", "Amit Kumar",
+                45, 50000.0, "ACTIVE", "1111"
+        );
 
-        // TODO: Step 3 - Verify Savings minimum balance rule enforcement through the interface
+        System.out.println("Accounts created successfully through Factory.");
 
-        // TODO: Step 4 - Verify Current overdraft limit enforcement through the interface
+        // Step 2: Deposits and withdrawals through IAccount
+        savings.deposit(2000.0);
+        System.out.println("Savings balance after deposit: "
+                + savings.getBalance());
 
-        // TODO: Step 5 - Verify FixedDeposit premature withdrawal rejection through the interface
+        current.deposit(5000.0);
+        System.out.println("Current balance after deposit: "
+                + current.getBalance());
 
-        // TODO: Step 6 - Verify requesting an invalid account type from AccountFactory throws IllegalArgumentException
+        // Step 3: Savings minimum balance rule
+        try {
+            savings.withdraw(6500.0);
+            System.out.println("Savings withdrawal successful.");
+        } catch (Exception e) {
+            System.out.println("Savings minimum balance rule enforced: "
+                    + e.getMessage());
+        }
+
+        // Step 4: Current overdraft limit
+        try {
+            current.withdraw(20000.0);
+            System.out.println("Current overdraft withdrawal successful.");
+        } catch (Exception e) {
+            System.out.println("Current overdraft limit enforced: "
+                    + e.getMessage());
+        }
+
+        // Step 5: Fixed Deposit premature withdrawal
+        try {
+            fixedDeposit.withdraw(10000.0);
+            System.out.println("Fixed Deposit withdrawal successful.");
+        } catch (Exception e) {
+            System.out.println("Fixed Deposit premature withdrawal rejected: "
+                    + e.getMessage());
+        }
+
+        // Step 6: Invalid account type
+        try {
+            IAccount invalid = AccountFactory.createAccount(
+                    "INVALID",
+                    "INV1001",
+                    "Test User",
+                    30,
+                    1000.0,
+                    "ACTIVE",
+                    "9999"
+            );
+
+            System.out.println("Invalid account created: "
+                    + invalid.getAccountType());
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid account type rejected: "
+                    + e.getMessage());
+        }
 
         System.out.println("=== Complete Activity 12 test suite and run ===");
     }
